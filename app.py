@@ -2,50 +2,55 @@ from sanic import Sanic
 from sanic.response import text, json
 from src.models import ProductModel, BatchModel, CategoryModel
 from datetime import datetime, date
+import uuid
 
 app = Sanic(__name__)
 
 
-data_product_list = [{
-    'id': 2000,
-    'category': 424,
-    'name': 'HP inspiron 5000',
-    'description': 'This is i5 11th generation intel core Laptop with 8GB RAM',
-    'slug': 'https://guthib.com/mausamadhikari',
-    'brand': 'HP',
-    'status': True,
-    'updated_date': "2005-01-01T00:00"
-}, {
-    'id': 1000,
-    'category': 212,
-    'name': 'Dell inspiron 5000',
-    'description': 'This is i5 10th generation intel core Laptop with 8GB RAM',
-    'slug': 'https://guthib.com/',
-    'brand': 'Dell',
-    'status': True,
-    'updated_date': "2001-01-01T00:00"
-}]
+data_product_list = [
+    {
+        "id": uuid.uuid4().hex,
+        "category": uuid.uuid4().hex,
+        "name": "HP inspiron 5000",
+        "description": "This is i5 11th generation intel core Laptop with 8GB RAM",
+        "slug": "https://guthib.com/mausamadhikari",
+        "brand": "HP",
+        "status": True,
+        "updated_date": "2005-01-01T00:00",
+    },
+    {
+        "id": uuid.uuid4().hex,
+        "category": uuid.uuid4().hex,
+        "name": "Dell inspiron 5000",
+        "description": "This is i5 10th generation intel core Laptop with 8GB RAM",
+        "slug": "https://guthib.com/",
+        "brand": "Dell",
+        "status": True,
+        "updated_date": "2001-01-01T00:00",
+    },
+]
 
-data_batch_list = [{
-    'id': 1000,
-    'sku_id': 100,
-    'purchase_order': 101,
-    'material_handle': 3,
-    'manufactured_date': "2024-01-01T00:00",
-    'expiry_date': "2001-01-01T00:00"
-}, {
-    'id': 2000,
-    'sku_id': 200,
-    'purchase_order': 201,
-    'material_handle': 5,
-    'manufactured_date': "2022-01-01T00:00",
-    'expiry_date': "2005-01-01T00:00"
-}]
+data_batch_list = [
+    {
+        "id": uuid.uuid4().hex,
+        "sku_id": uuid.uuid4().hex,
+        "purchase_order": 101,
+        "material_handle": 3,
+        "manufactured_date": "2024-01-01T00:00",
+        "expiry_date": "2001-01-01T00:00",
+    },
+    {
+        "id": uuid.uuid4().hex,
+        "sku_id": uuid.uuid4().hex,
+        "purchase_order": 201,
+        "material_handle": 5,
+        "manufactured_date": "2022-01-01T00:00",
+        "expiry_date": "2005-01-01T00:00",
+    },
+]
 
 data_category = dict(
-    id=1000,
-    name="Electronics",
-    sub_category=1001
+    id=uuid.uuid4().hex, name="Electronics", sub_category=uuid.uuid4().hex
 )
 
 
@@ -59,7 +64,7 @@ def default(o):
     Hour (h) 	                    hh, 00 to 23, 24:00:00 as the end time
     Minute (m) 	                    mm, 00 to 59
     Second (s) 	                    ss, 00 to 59
-    Decimal fraction (f) 	        Fractions of seconds, any degree of accuracy 
+    Decimal fraction (f) 	        Fractions of seconds, any degree of accuracy
 
 
     date.isoformat()->str
@@ -92,9 +97,9 @@ async def get_batches(request):
 
 @app.get("/batch/<id:int>")
 async def get_batches_by_id(request, id: int):
-    for i in range(len(data_batch_list)+1):
+    for i in range(len(data_batch_list) + 1):
         try:
-            if data_batch_list[i]['id'] == id:
+            if data_batch_list[i]["id"] == id:
                 batch_with_id = data_batch_list[i]
                 batch = BatchModel(**batch_with_id)
                 batch.manufactured_date = default(batch.manufactured_date)
@@ -109,10 +114,11 @@ async def get_category(request):
     category = CategoryModel(**data_category)
     return json(category.dict())
 
-app.add_route(get_category, '/categories')
+
+app.add_route(get_category, "/categories")
 
 
-@app.route("/product", methods=['POST', 'GET'])
+@app.route("/product", methods=["POST", "GET"])
 async def get_product(request):
     # data_product["manufactured_date"] = myconverter(
     #     data_product["manufactured_date"])
@@ -143,11 +149,11 @@ async def get_product(request):
 #     return json(new_product)
 
 
-@app.route('/product/<id:int>')
+@app.route("/product/<id:int>")
 async def get_product_by_id(request, id: int):
-    for i in range(len(data_product_list)+1):
+    for i in range(len(data_product_list) + 1):
         try:
-            if data_product_list[i]['id'] == id:
+            if data_product_list[i]["id"] == id:
                 product_with_id = data_product_list[i]
                 product = ProductModel(**product_with_id)
                 product.updated_date = default(product.updated_date)

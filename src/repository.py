@@ -1,27 +1,51 @@
-from src.models import ProductModel, BatchModel, CategoryModel
+from src.models import Product, Batch, Category
 
 
 from typing import List, Dict
+from uuid import UUID
 
 from ..app import data_product_list, data_batch_list, data_category
 
 
-async def update_values(self: List[Dict], values: Dict):
+async def update_values(model: List[Dict], values: Dict):
     """
-        Function to update values in all models
-        """
-    for i in range(len(self)+1):
-        if self[i]['id'] == values.id:
-            product_with_id = self[i]
-            product_with_id.update(values)
+    Function to update values in all models
+    """
+    for i in range(len(model) + 1):
+        if model[i]["id_"] == values.id_:
+            model[i].update(values)
+    return model[i]
 
-#productrepository
-class Batchrepository:
+
+# async def get_values(self: List[Dict], values: Dict):
+#     """
+#     Function to update values in all models
+#     """
+#     for i in range(len(self) + 1):
+#         if self[i]["id_"] == values.id_:
+#             return self.dict()
+
+
+# productrepository
+
+
+class Productrepository:
     # Product model add , update and delete operations
+    async def get_product(self, id_: UUID) -> Product:
+        # get matching dictionary from static product list
+        # construct domain model from matched
+        # return product
+        product = {}
+        if id_ in data_product_list[id_]:
+            product = data_product_list[id_]
+        return Product.construct({product})
 
-    async def add_product(self, model: ProductModel):
+    # def get_all(self):
+    #     return list(map(lambda item: item[1], self.items))
+
+    async def add_product(self, model: Product):
         values = {
-            "id": model.id,
+            "id_": model.id_,
             "category": model.category,
             "name": model.name,
             "description": model.description,
@@ -32,9 +56,9 @@ class Batchrepository:
         }
         await model.append(values)
 
-    async def update_product(self, model: ProductModel):
+    async def update_product(self, model: Product) -> Product:
         values = {
-            "id": model.id,
+            "id_": model.id_,
             "category": model.category,
             "name": model.name,
             "description": model.description,
@@ -43,30 +67,41 @@ class Batchrepository:
             "status": model.status,
             "updated_date": model.updated_date,
         }
-        await model.update_values(values)
+        updated_product = await update_values(model, values)
+        return updated_product
 
-    async def delete_product(self, model: ProductModel):
-        if self.id in model.id:
-            del model.id
-            return "{model.id} is deleted successfully"
+    async def delete_product(self, model: Product) -> None:
+        if self.id_ in model.id_:
+            # can pop or use del
+            del model[id_]
 
+
+class Batchrepository:
     # batch model add,update and delete operations
+    async def get_batch(self, id_: UUIasync def get_product(self, id_: UUID) -> Batch:
+        # get matching dictionary from static product list
+        # construct domain model from matched
+        # return product
+        batch = {}
+        if id_ in data_batch_list[id_]:
+            batch = data_batch_list[id_]
+        return Batch.construct({batch})
 
-    async def add_batch(self, model: ProductModel):
+    async def add_batch(self, model: Product):
         values = {
-            "id": model.id,
-            "sku_id": model.sku_id,
+            "id_": model.id_,
+            "sku_id_": model.sku_id_,
             "purchase_order": model.purchase_order,
             "material_handle": model.material_handle,
             "manufactured_date": model.manufactured_date,
             "expiry_date": model.expiry_date,
         }
-        await data_product_list.append(values)
+        await model.append(values)
 
-    async def update_batch(self, model: BatchModel):
+    async def update_batch(self, model: Batch):
         values = {
-            "id": model.id,
-            "sku_id": model.sku_id,
+            "id_": model.id_,
+            "sku_id_": model.sku_id_,
             "purchase_order": model.purchase_order,
             "material_handle": model.material_handle,
             "manufactured_date": model.manufactured_date,
@@ -75,30 +110,40 @@ class Batchrepository:
 
         await model.update_values(values)
 
-    async def delete_batch(self, model: BatchModel):
-        if self.id in model.id:
-            del model.id
-            return "{model.id} is deleted successfully"
+    async def delete_batch(self, model: Batch):
+        if self.id_ in model.id_:
+            del model.id_
+            return "{model.id_} is deleted successfully"
 
+
+class Categoryrepository:
     # category model add,update and delete operations
+    async def get_category(self, model: Product):
+        # get matching dictionary from static product list
+        # construct domain model from matched
+        # return product
+        category = {}
+        if id_ in data_category[id_]:
+            category = data_category[id_]
+        return Category.construct({category})
 
-    async def add_category(self, model: ProductModel):
+    async def add_category(self, model: Product):
         values = {
-            'id': model.id,
-            'name': model.name,
-            'sub_category': model.sub_category,
+            "id_": model.id_,
+            "name": model.name,
+            "sub_category": model.sub_category,
         }
-        await data_product_list.append(values)
+        await model.append(values)
 
-    async def update_category(self, model: CategoryModel):
+    async def update_category(self, model: Category):
         values = {
-            'id': model.id,
-            'name': model.name,
-            'sub_category': model.sub_category,
+            "id_": model.id_,
+            "name": model.name,
+            "sub_category": model.sub_category,
         }
         await model.update_values(values)
 
-    async def delete_category(self, model: CategoryModel):
-        if self.id in model.id:
-            del model.id
-            return "{model.id} is deleted successfully"
+    async def delete_category(self, model: Category):
+        if self.id_ in model.id_:
+            del model.id_
+            return "{model.id_} is deleted successfully"
