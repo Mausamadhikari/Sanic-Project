@@ -119,6 +119,7 @@ domain/
 repositories/
 tests/
 utils/
+randomthings/
 # Distribution / packaging
 .Python
 build/

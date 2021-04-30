@@ -1,28 +1,23 @@
+from __future__ import annotations
 from pydantic import BaseModel, Field, HttpUrl, validator
 from datetime import datetime
 from pydantic.color import Color
 from typing import Optional, Dict, Any
-from uuid import UUID
+from uuid import UUID, uuid4
+
 
 
 class Batch(BaseModel):
 
     id_: UUID
-    sku_id: int
+    sku_id: UUID
     purchase_order: int
     material_handle: int
     manufactured_date: datetime
     expiry_date: datetime  # check whether
 
-    @validator("manufactured_date")
-    def manufactured_within_five_years(cls, manufactured_date):
-        time_in_delta = datetime.now() - manufactured_date
-        if not abs(time_in_delta.days) <= 5 * 365:
-            raise ValueError("Must be manufactured not exceeding five years from now")
-        return manufactured_date
-
     class Config:
-        extra = "Forbid"
+        extra = "forbid"
         allow_mutations = False
         title = "Batch"
 
@@ -36,7 +31,7 @@ class Batch(BaseModel):
 
 
 def batch_factory(
-    id_: UUID,
+    id_: uuid4(),
     sku_id: int,
     purchase_order: int,
     material_handle: int,
@@ -60,7 +55,7 @@ class Sku(BaseModel):
     size: str
 
     class Config:
-        extra = "Forbid"
+        extra = "forbid"
         allow_mutations = False
         title = "SKU"
 
@@ -82,11 +77,11 @@ class Product(BaseModel):
         return name
 
     class Config:
-        extra = "Forbid"
+        extra = "forbid"
         allow_mutations = False
         title = "Product"
 
-    def update(self, mapping: Dict[str, Any]) -> Product:
+    def update(self, mapping: Dict[str, Any]):
         return self.copy(update=mapping)
 
 
@@ -118,11 +113,11 @@ class Category(BaseModel):
     sub_category: UUID
 
     class Config:
-        extra = "Forbid"
+        extra = "forbid"
         allow_mutations = False
         title = "Category"
 
-    def update(self, mapping: Dict[str, Any]) -> Category:
+    def update(self, mapping: Dict[str, Any]):
         return self.copy(update=mapping)
 
 
@@ -144,11 +139,11 @@ class Unit(BaseModel):
     label: str
 
     class Config:
-        extra = "Forbid"
+        extra = "forbid"
         allow_mutations = False
         title = "Unit"
 
-    def update(self, mapping: Dict[str, Any]) -> Unit:
+    def update(self, mapping: Dict[str, Any]):
         return self.copy(update=mapping)
 
 

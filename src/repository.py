@@ -7,14 +7,14 @@ from uuid import UUID
 from ..app import data_product_list, data_batch_list, data_category
 
 
-async def update_values(model: List[Dict], values: Dict):
-    """
-    Function to update values in all models
-    """
-    for i in range(len(model) + 1):
-        if model[i]["id_"] == values.id_:
-            model[i].update(values)
-    return model[i]
+# async def update_values(model: List[Dict], values: Dict):
+#     """
+#     Function to update values in all models
+#     """
+#     for i in range(len(model) + 1):
+#         if model[i]["id_"] == values.id_:
+#             model[i].update(values)
+#     return model[i]
 
 
 # async def get_values(self: List[Dict], values: Dict):
@@ -31,7 +31,7 @@ async def update_values(model: List[Dict], values: Dict):
 
 class Productrepository:
     # Product model add , update and delete operations
-    async def get_product(self, id_: UUID) -> Product:
+    async def get_product(self, id_: Product.id_) -> Product:
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product
@@ -56,7 +56,7 @@ class Productrepository:
         }
         await model.append(values)
 
-    async def update_product(self, model: Product) -> Product:
+    async def update_product(self, model: Product) -> None:
         values = {
             "id_": model.id_,
             "category": model.category,
@@ -67,18 +67,21 @@ class Productrepository:
             "status": model.status,
             "updated_date": model.updated_date,
         }
-        updated_product = await update_values(model, values)
-        return updated_product
+        for i in range(len(self) + 1):
+            if self[i]["id_"] == values.id_:
+                await self[i].update(values)
+    
+    
 
-    async def delete_product(self, model: Product) -> None:
+    async def delete_product(self, model: Product):
         if self.id_ in model.id_:
             # can pop or use del
-            del model[id_]
+            del model.id_
 
 
 class Batchrepository:
     # batch model add,update and delete operations
-    async def get_batch(self, id_: UUIasync def get_product(self, id_: UUID) -> Batch:
+    async def get_batch(self, id_: UUID) -> Batch:
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product
@@ -108,7 +111,9 @@ class Batchrepository:
             "expiry_date": model.expiry_date,
         }
 
-        await model.update_values(values)
+        for i in range(len(self) + 1):
+            if self[i]["id_"] == values.id_:
+                await self[i].update(values)
 
     async def delete_batch(self, model: Batch):
         if self.id_ in model.id_:
@@ -118,7 +123,7 @@ class Batchrepository:
 
 class Categoryrepository:
     # category model add,update and delete operations
-    async def get_category(self, model: Product):
+    async def get_category(self, id_: UUID):
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product
@@ -141,7 +146,9 @@ class Categoryrepository:
             "name": model.name,
             "sub_category": model.sub_category,
         }
-        await model.update_values(values)
+        for i in range(len(self) + 1):
+            if self[i]["id_"] == values.id_:
+                await self[i].update(values)
 
     async def delete_category(self, model: Category):
         if self.id_ in model.id_:

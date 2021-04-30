@@ -1,5 +1,6 @@
 from src.models import Product
 from pydantic import ValidationError
+import uuid
 
 data_product = dict(
     id=uuid.uuid4().hex,

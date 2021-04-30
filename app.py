@@ -1,6 +1,6 @@
 from sanic import Sanic
 from sanic.response import text, json
-from src.models import ProductModel, BatchModel, CategoryModel
+from src.models import Product, Batch, Category
 from datetime import datetime, date
 import uuid
 
@@ -9,7 +9,7 @@ app = Sanic(__name__)
 
 data_product_list = [
     {
-        "id": uuid.uuid4().hex,
+        "id_": uuid.uuid4().hex,
         "category": uuid.uuid4().hex,
         "name": "HP inspiron 5000",
         "description": "This is i5 11th generation intel core Laptop with 8GB RAM",
@@ -19,7 +19,7 @@ data_product_list = [
         "updated_date": "2005-01-01T00:00",
     },
     {
-        "id": uuid.uuid4().hex,
+        "id_": uuid.uuid4().hex,
         "category": uuid.uuid4().hex,
         "name": "Dell inspiron 5000",
         "description": "This is i5 10th generation intel core Laptop with 8GB RAM",
@@ -32,7 +32,7 @@ data_product_list = [
 
 data_batch_list = [
     {
-        "id": uuid.uuid4().hex,
+        "id_": uuid.uuid4().hex,
         "sku_id": uuid.uuid4().hex,
         "purchase_order": 101,
         "material_handle": 3,
@@ -40,7 +40,7 @@ data_batch_list = [
         "expiry_date": "2001-01-01T00:00",
     },
     {
-        "id": uuid.uuid4().hex,
+        "id_": uuid.uuid4().hex,
         "sku_id": uuid.uuid4().hex,
         "purchase_order": 201,
         "material_handle": 5,
@@ -50,7 +50,7 @@ data_batch_list = [
 ]
 
 data_category = dict(
-    id=uuid.uuid4().hex, name="Electronics", sub_category=uuid.uuid4().hex
+    id_=uuid.uuid4().hex, name="Electronics", sub_category=uuid.uuid4().hex
 )
 
 
@@ -85,23 +85,24 @@ async def get_batches(request):
     for i in range(len(data_batch_list)):
         try:
             batch_with_id = data_batch_list[i]
-            batch = BatchModel(**batch_with_id)
+            batch = Batch(**batch_with_id)
+            batch.id_ = str(batch.id_)
+            batch.sku_id = str(batch.sku_id)
             batch.manufactured_date = default(batch.manufactured_date)
             batch.expiry_date = default(batch.expiry_date)
             new_batch.append(batch.dict())
-            print(new_batch)
         except Exception as e:
             return json(e)
     return json(new_batch)
 
 
-@app.get("/batch/<id:int>")
-async def get_batches_by_id(request, id: int):
+@app.get("/batch/<id_:int>")
+async def get_batches_by_id_(request, id_: int):
     for i in range(len(data_batch_list) + 1):
         try:
-            if data_batch_list[i]["id"] == id:
+            if data_batch_list[i]["id_"] == id_:
                 batch_with_id = data_batch_list[i]
-                batch = BatchModel(**batch_with_id)
+                batch = Batch(**batch_with_id)
                 batch.manufactured_date = default(batch.manufactured_date)
                 batch.expiry_date = default(batch.expiry_date)
                 return json(batch.dict())
@@ -111,7 +112,9 @@ async def get_batches_by_id(request, id: int):
 
 @app.get("/category")
 async def get_category(request):
-    category = CategoryModel(**data_category)
+    category = Category(**data_category)
+    category.id_ = str(category.id_)
+    category.sub_category = str(category.sub_category)
     return json(category.dict())
 
 
@@ -124,7 +127,7 @@ async def get_product(request):
     #     data_product["manufactured_date"])
     # data_product["updated_date"] = myconverter(
     #     data_product["updated_date"])
-    # m = ProductModel(**data_product)
+    # m = Product(**data_product)
 
     # m.manufactured_date = default(m.manufactured_date)
     # m.updated_date = default(m.updated_date)
@@ -133,10 +136,11 @@ async def get_product(request):
     for i in range(len(data_product_list)):
         try:
             product_with_id = data_product_list[i]
-            product = ProductModel(**product_with_id)
+            product = Product(**product_with_id)
+            product.id_ = str(product.id_)
+            product.category = str(product.category)
             product.updated_date = default(product.updated_date)
             new_product.append(product.dict())
-            print(new_product)
         except Exception as e:
             return json(e)
     return json(new_product)
@@ -149,13 +153,13 @@ async def get_product(request):
 #     return json(new_product)
 
 
-@app.route("/product/<id:int>")
-async def get_product_by_id(request, id: int):
+@app.route("/product/<id_:int>")
+async def get_product_by_id_(request, id_: int):
     for i in range(len(data_product_list) + 1):
         try:
-            if data_product_list[i]["id"] == id:
+            if data_product_list[i]["id_"] == id_:
                 product_with_id = data_product_list[i]
-                product = ProductModel(**product_with_id)
+                product = Product(**product_with_id)
                 product.updated_date = default(product.updated_date)
                 return json(product.dict())
 
