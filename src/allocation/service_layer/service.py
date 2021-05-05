@@ -1,5 +1,9 @@
 from __future__ import annotations
-from src.allocation.adapters.repository import BatchRepository, Categoryrepository, Productrepository
+from src.allocation.adapters.repository import (
+    BatchRepository,
+    Categoryrepository,
+    Productrepository,
+)
 from src.allocation.service_layer import abstract, handler
 from src.allocation.domain import command
 
@@ -19,7 +23,7 @@ def add_batch(validated_data: abstract.AddBatch) -> None:  # call commmand.py
     repo.add_batch(batch)
 
 
-def update_batch(validated_data: command.AddBatch) -> None:
+def update_batch(validated_data: abstract.AddBatch) -> None:
     batch = handler.update_batch(
         command.AddBatch(
             id_=validated_data.id_,
@@ -34,7 +38,7 @@ def update_batch(validated_data: command.AddBatch) -> None:
     repo.update_batch(batch)
 
 
-def add_product(validated_data: command.AddProduct) -> None:
+def add_product(validated_data: abstract.AddProduct) -> None:
     product = handler.add_product()(
         command.AddProduct(
             id_=validated_data.id_,
@@ -51,7 +55,7 @@ def add_product(validated_data: command.AddProduct) -> None:
     repo.add_product(product)
 
 
-def add_category(validated_data: command.AddCategory) -> None:
+def add_category(validated_data: abstract.AddCategory) -> None:
     category = handler.add_category(
         command.AddCategory(
             id_=validated_data.id_,
