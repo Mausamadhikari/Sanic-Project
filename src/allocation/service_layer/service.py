@@ -1,4 +1,6 @@
 from __future__ import annotations
+from uuid import UUID
+from allocation.domain.model import Batch
 from src.allocation.adapters.repository import (
     BatchRepository,
     Categoryrepository,
@@ -11,7 +13,7 @@ from src.allocation.domain import command
 def add_batch(validated_data: abstract.AddBatch) -> None:  # call commmand.py
     batch = handler.add_batch(
         command.AddBatch(
-            id_=validated_data.id_,
+            
             sku_id=validated_data.sku_id,
             purchase_order=validated_data.purchase_order,
             material_handle=validated_data.material_handle,
@@ -23,18 +25,14 @@ def add_batch(validated_data: abstract.AddBatch) -> None:  # call commmand.py
     repo.add_batch(batch)
 
 
-def update_batch(validated_data: abstract.AddBatch) -> None:
+def update_batch_quantity(id_:UUID,validated_data: abstract.UpdateQuantity) -> None:
+    repo= BatchRepository()
+    batch = repo.get(id_)
     batch = handler.update_batch(
-        command.AddBatch(
-            id_=validated_data.id_,
-            sku_id=validated_data.sku_id,
-            purchase_order=validated_data.purchase_order,
-            material_handle=validated_data.material_handle,
-            manufactured_date=validated_data.manufactured_date,
-            expiry_date=validated_data.expiry_date,
+        command.UpdadteBatchQuantity(
+            model=Batch,quantity=validated_data.quatity
         )
     )
-    repo = BatchRepository
     repo.update_batch(batch)
 
 

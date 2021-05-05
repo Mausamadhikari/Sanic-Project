@@ -1,4 +1,5 @@
 from __future__ import annotations
+import uuid
 from pydantic import BaseModel, Field, HttpUrl, validator
 from datetime import datetime
 from pydantic.color import Color
@@ -30,7 +31,6 @@ class Batch(BaseModel):
 
 
 def batch_factory(
-    id_: uuid4(),
     sku_id: int,
     purchase_order: int,
     material_handle: int,
@@ -38,7 +38,7 @@ def batch_factory(
     expiry_date: datetime,
 ) -> Batch:
     return Batch(
-        id_=id,
+        id_=uuid(),
         sku_id=sku_id,
         purchase_order=purchase_order,
         material_handle=material_handle,

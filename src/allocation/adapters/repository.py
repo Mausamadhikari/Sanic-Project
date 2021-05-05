@@ -79,7 +79,7 @@ class Productrepository:
 
 class Batchrepository:
     # batch model add,update and delete operations
-    async def get_batch(self, id_: UUID) -> Batch:
+    async def get(self, id_: UUID) -> Batch:
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product
