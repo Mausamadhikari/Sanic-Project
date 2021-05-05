@@ -1,10 +1,10 @@
-from src.models import Product, Batch, Category
+from src.allocation.domain.model import Product, Batch, Category
 
 
 from typing import List, Dict
 from uuid import UUID
 
-from ..app import data_product_list, data_batch_list, data_category
+from randomthings.app import data_product_list, data_batch_list, data_category
 
 
 # async def update_values(model: List[Dict], values: Dict):
@@ -70,8 +70,6 @@ class Productrepository:
         for i in range(len(self) + 1):
             if self[i]["id_"] == values.id_:
                 await self[i].update(values)
-    
-    
 
     async def delete_product(self, model: Product):
         if self.id_ in model.id_:

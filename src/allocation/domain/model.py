@@ -6,7 +6,6 @@ from typing import Optional, Dict, Any
 from uuid import UUID, uuid4
 
 
-
 class Batch(BaseModel):
 
     id_: UUID
