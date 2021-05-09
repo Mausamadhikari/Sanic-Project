@@ -23,7 +23,7 @@ async def update_batch(cmd: BatchCommand) -> model.Batch:
 
 async def add_product(cmd: AddBatch) -> model.Product:
     return model.product_factory(
-        id_=cmd.id_,
+
         category=cmd.category,
         name=cmd.name,
         description=cmd.description,
@@ -36,7 +36,7 @@ async def add_product(cmd: AddBatch) -> model.Product:
 
 async def add_category(cmd: AddCategory) -> model.Category:
     return model.category_factory(
-        id_=cmd.id_,
+
         name=cmd.name,
         sub_category=cmd.sub_category,
     )

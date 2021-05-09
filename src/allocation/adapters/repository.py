@@ -26,24 +26,24 @@ from randomthings.app import data_product_list, data_batch_list, data_category
 #             return self.dict()
 
 
-# productrepository
+# ProductRepository
 
 
-class Productrepository:
+class ProductRepository:
     # Product model add , update and delete operations
-    async def get_product(self, id_: Product.id_) -> Product:
+    async def get(self, id_: Product.id_) -> Product:
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product
         product = {}
         if id_ in data_product_list[id_]:
             product = data_product_list[id_]
-        return Product.construct({product})
+        return Product.construct(product)
 
     # def get_all(self):
     #     return list(map(lambda item: item[1], self.items))
 
-    async def add_product(self, model: Product):
+    async def add(self, model: Product):
         values = {
             "id_": model.id_,
             "category": model.category,
@@ -56,7 +56,7 @@ class Productrepository:
         }
         await model.append(values)
 
-    async def update_product(self, model: Product) -> None:
+    async def update(self, model: Product) -> None:
         values = {
             "id_": model.id_,
             "category": model.category,
@@ -68,10 +68,10 @@ class Productrepository:
             "updated_date": model.updated_date,
         }
         for i in range(len(self) + 1):
-            if self[i]["id_"] == values.id_:
+            # if self[i]["id_"] == values.id_:
                 await self[i].update(values)
 
-    async def delete_product(self, model: Product):
+    async def delete(self, model: Product):
         if self.id_ in model.id_:
             # can pop or use del
             del model.id_
@@ -86,24 +86,26 @@ class Batchrepository:
         batch = {}
         if id_ in data_batch_list[id_]:
             batch = data_batch_list[id_]
-        return Batch.construct({batch})
+        return Batch.construct(batch)
 
-    async def add_batch(self, model: Product):
+    async def add(self, model: Batch):
         values = {
             "id_": model.id_,
             "sku_id_": model.sku_id_,
             "purchase_order": model.purchase_order,
+            "quantity":model.quantity,
             "material_handle": model.material_handle,
             "manufactured_date": model.manufactured_date,
             "expiry_date": model.expiry_date,
         }
         await model.append(values)
 
-    async def update_batch(self, model: Batch):
+    async def update(self, model: Batch):
         values = {
             "id_": model.id_,
             "sku_id_": model.sku_id_,
             "purchase_order": model.purchase_order,
+            "quantity":model.quantity,
             "material_handle": model.material_handle,
             "manufactured_date": model.manufactured_date,
             "expiry_date": model.expiry_date,
@@ -113,7 +115,7 @@ class Batchrepository:
             if self[i]["id_"] == values.id_:
                 await self[i].update(values)
 
-    async def delete_batch(self, model: Batch):
+    async def delete(self, model: Batch):
         if self.id_ in model.id_:
             del model.id_
             return "{model.id_} is deleted successfully"
@@ -121,7 +123,7 @@ class Batchrepository:
 
 class Categoryrepository:
     # category model add,update and delete operations
-    async def get_category(self, id_: UUID):
+    async def get(self, id_: UUID):
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product
@@ -130,7 +132,7 @@ class Categoryrepository:
             category = data_category[id_]
         return Category.construct({category})
 
-    async def add_category(self, model: Product):
+    async def add(self, model: Category):
         values = {
             "id_": model.id_,
             "name": model.name,
@@ -138,7 +140,7 @@ class Categoryrepository:
         }
         await model.append(values)
 
-    async def update_category(self, model: Category):
+    async def update(self, model: Category):
         values = {
             "id_": model.id_,
             "name": model.name,
@@ -148,7 +150,7 @@ class Categoryrepository:
             if self[i]["id_"] == values.id_:
                 await self[i].update(values)
 
-    async def delete_category(self, model: Category):
+    async def delete(self, model: Category):
         if self.id_ in model.id_:
             del model.id_
             return "{model.id_} is deleted successfully"

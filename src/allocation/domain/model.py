@@ -12,6 +12,7 @@ class Batch(BaseModel):
     id_: UUID
     sku_id: UUID
     purchase_order: int
+    quantity:int
     material_handle: int
     manufactured_date: datetime
     expiry_date: datetime  # check whether
@@ -33,6 +34,7 @@ class Batch(BaseModel):
 def batch_factory(
     sku_id: int,
     purchase_order: int,
+    quantity:int,
     material_handle: int,
     manufactured_date: datetime,
     expiry_date: datetime,
@@ -41,6 +43,7 @@ def batch_factory(
         id_=uuid(),
         sku_id=sku_id,
         purchase_order=purchase_order,
+        quantity=quantity,
         material_handle=material_handle,
         manufactured_date=manufactured_date,
         expiry_date=expiry_date,
@@ -85,7 +88,6 @@ class Product(BaseModel):
 
 
 def product_factory(
-    id_: UUID,
     category: UUID,
     name: str,
     description: str,
@@ -95,7 +97,7 @@ def product_factory(
     updated_date: Optional[datetime] = None,
 ) -> Product:
     return Product(
-        id_=id,
+        id_=uuid(),
         category=category,
         name=name,
         description=description,
@@ -126,7 +128,7 @@ def category_factory(
     sub_category: UUID,
 ) -> Category:
     return Category(
-        id_=id_,
+        id_=uuid(),
         name=name,
         sub_category=sub_category,
     )
@@ -147,12 +149,11 @@ class Unit(BaseModel):
 
 
 def unit_factory(
-    id_: UUID,
     total_unit: int,
     label: str,
 ) -> Unit:
     return Unit(
-        id_ - id_,
+        id_=uuid(),
         total_unit=total_unit,
         label=label,
     )
