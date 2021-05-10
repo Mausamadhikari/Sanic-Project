@@ -9,6 +9,7 @@ from allocation.domain.model import Batch
 class AddBatch(BaseModel):
     sku_id: UUID
     purchase_order: int
+    quantity:int
     material_handle: int
     manufactured_date: datetime
     expiry_date: datetime
@@ -22,8 +23,16 @@ class UpdadteBatchQuantity(BatchCommand):
     quantity: int
 
 
+
+# def delete_batch(id_:UUID):
+#     repo = BatchRepository()
+#     batch = repo.get(id_)
+    
+# class DeleteBatch(BatchCommand):
+#     id_ : UUID
+
+
 class AddProduct(BaseModel):
-    id_: UUID
     category: UUID
     name: str
     description: str
@@ -34,6 +43,5 @@ class AddProduct(BaseModel):
 
 
 class AddCategory(BaseModel):
-    id_: UUID
     name: str
     sub_category: UUID

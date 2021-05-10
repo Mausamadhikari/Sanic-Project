@@ -1,10 +1,14 @@
 from src.allocation.domain import model
-from src.allocation.domain.command import AddBatch, AddCategory, BatchCommand, UpdadteBatchQuantity
+from src.allocation.domain.command import (
+    AddBatch,
+    AddCategory,
+    BatchCommand,
+    UpdadteBatchQuantity,
+)
 
 
 async def add_batch(cmd: AddBatch) -> model.Batch:
     return model.batch_factory(
-        
         sku_id=cmd.sku_id,
         purchase_order=cmd.purchase_order,
         material_handle=cmd.material_handle,
@@ -14,16 +18,12 @@ async def add_batch(cmd: AddBatch) -> model.Batch:
 
 
 async def update_batch(cmd: BatchCommand) -> model.Batch:
-    if isinstance(cmd,UpdadteBatchQuantity):
-        return cmd.batch.update({
-            'quantity':cmd.quantity
-        })
-    
+    if isinstance(cmd, UpdadteBatchQuantity):
+        return cmd.batch.update({"quantity": cmd.quantity})
 
 
 async def add_product(cmd: AddBatch) -> model.Product:
     return model.product_factory(
-
         category=cmd.category,
         name=cmd.name,
         description=cmd.description,
@@ -36,7 +36,6 @@ async def add_product(cmd: AddBatch) -> model.Product:
 
 async def add_category(cmd: AddCategory) -> model.Category:
     return model.category_factory(
-
         name=cmd.name,
         sub_category=cmd.sub_category,
     )

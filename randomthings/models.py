@@ -1,5 +1,4 @@
 from __future__ import annotations
-import uuid
 from pydantic import BaseModel, Field, HttpUrl, validator
 from datetime import datetime
 from pydantic.color import Color
@@ -12,7 +11,6 @@ class Batch(BaseModel):
     id_: UUID
     sku_id: UUID
     purchase_order: int
-    quantity: int
     material_handle: int
     manufactured_date: datetime
     expiry_date: datetime  # check whether
@@ -32,18 +30,17 @@ class Batch(BaseModel):
 
 
 def batch_factory(
+    id_: uuid4(),
     sku_id: int,
     purchase_order: int,
-    quantity: int,
     material_handle: int,
     manufactured_date: datetime,
     expiry_date: datetime,
 ) -> Batch:
     return Batch(
-        id_=uuid(),
+        id_=id,
         sku_id=sku_id,
         purchase_order=purchase_order,
-        quantity=quantity,
         material_handle=material_handle,
         manufactured_date=manufactured_date,
         expiry_date=expiry_date,
@@ -88,6 +85,7 @@ class Product(BaseModel):
 
 
 def product_factory(
+    id_: UUID,
     category: UUID,
     name: str,
     description: str,
@@ -97,7 +95,7 @@ def product_factory(
     updated_date: Optional[datetime] = None,
 ) -> Product:
     return Product(
-        id_=uuid(),
+        id_=id,
         category=category,
         name=name,
         description=description,
@@ -128,7 +126,7 @@ def category_factory(
     sub_category: UUID,
 ) -> Category:
     return Category(
-        id_=uuid(),
+        id_=id_,
         name=name,
         sub_category=sub_category,
     )
@@ -149,11 +147,12 @@ class Unit(BaseModel):
 
 
 def unit_factory(
+    id_: UUID,
     total_unit: int,
     label: str,
 ) -> Unit:
     return Unit(
-        id_=uuid(),
+        id_ - id_,
         total_unit=total_unit,
         label=label,
     )

@@ -37,7 +37,6 @@ def update_batch_quantity(id_: UUID, validated_data: abstract.UpdateQuantity) ->
 def add_product(validated_data: abstract.AddProduct) -> None:
     product = handler.add_product(
         command.AddProduct(
-            id_=validated_data.id_,
             category=validated_data.category,
             name=validated_data.name,
             description=validated_data.description,
@@ -54,7 +53,6 @@ def add_product(validated_data: abstract.AddProduct) -> None:
 def add_category(validated_data: abstract.AddCategory) -> None:
     category = handler.add_category(
         command.AddCategory(
-            id_=validated_data.id_,
             name=validated_data.name,
             sub_category=validated_data.sub_category,
         )

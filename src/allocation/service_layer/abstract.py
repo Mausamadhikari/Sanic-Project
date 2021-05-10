@@ -34,6 +34,5 @@ class AddProduct(BaseModel):
 
 
 class AddCategory(BaseModel):
-    id_: UUID
     name: str
     sub_category: UUID
