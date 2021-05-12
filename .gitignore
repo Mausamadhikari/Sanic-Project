@@ -119,7 +119,7 @@ __pycache__/
 tests/
 utils/
 randomthings/
-files.json
+file.json
 app.py
 readme.md
 # Distribution / packaging

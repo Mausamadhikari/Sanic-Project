@@ -1,2 +1,0 @@
-{'id_': UUID('2c0cde23-d418-4be1-8785-88dc54eefe9d'), 'sku_id': UUID('5c8f858e-d483-4a65-9a7e-2c4e479ec570'), 'purchase_order': 101, 'quantity': 5, 'material_handle': 3, 'manufactured_date': datetime.datetime(2024, 1, 1, 0, 0), 'expiry_date': datetime.datetime(2001, 1, 1, 0, 0)}
-{'id_': UUID('532490f5-b02a-4389-8375-3d45e44fd0f0'), 'sku_id': UUID('e6db7d5e-080a-4be9-9c79-09175b4019f4'), 'purchase_order': 201, 'quantity': 10, 'material_handle': 5, 'manufactured_date': datetime.datetime(2022, 1, 1, 0, 0), 'expiry_date': datetime.datetime(2005, 1, 1, 0, 0)}
