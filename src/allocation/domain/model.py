@@ -40,7 +40,7 @@ def batch_factory(
     expiry_date: datetime,
 ) -> Batch:
     return Batch(
-        id_=uuid(),
+        id_=uuid.uuid4(),
         sku_id=sku_id,
         purchase_order=purchase_order,
         quantity=quantity,

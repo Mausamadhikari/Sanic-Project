@@ -3,13 +3,13 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID, uuid4
 
-from allocation.domain.model import Batch
+from src.allocation.domain.model import Batch
 
 
-class AddBatch(BaseModel):
+class CreateBatch(BaseModel):
     sku_id: UUID
     purchase_order: int
-    quantity:int
+    quantity: int
     material_handle: int
     manufactured_date: datetime
     expiry_date: datetime
@@ -23,11 +23,10 @@ class UpdadteBatchQuantity(BatchCommand):
     quantity: int
 
 
-
 # def delete_batch(id_:UUID):
 #     repo = BatchRepository()
 #     batch = repo.get(id_)
-    
+
 # class DeleteBatch(BatchCommand):
 #     id_ : UUID
 

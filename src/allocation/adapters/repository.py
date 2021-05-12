@@ -28,23 +28,29 @@ import abc
 
 # ProductRepository
 class AbstractRepository(abc.ABC):
-    def get(self,id_):
+    def get(self):
         raise NotImplementedError
 
-    def add(self,model):
+    def add(self):
+        raise NotImplementedError
+
+    def update(self):
+        raise NotImplementedError
+
+    def delete(self):
         raise NotImplementedError
 
 
 class ProductRepository(AbstractRepository):
     # Product model add , update and delete operations
-    def get(self, id_: Product.id_) -> Product:
-        # get matching dictionary from static product list
-        # construct domain model from matched
-        # return product
-        product = {}
-        if id_ in data_product_list[id_]:
-            product = data_product_list[id_]
-        return Product.construct(product)
+    # def get(self, id_: Product.id_) -> Product:
+    #     # get matching dictionary from static product list
+    #     # construct domain model from matched
+    #     # return product
+    #     product = {}
+    #     if id_ in data_product_list[id_]:
+    #         product = data_product_list[id_]
+    #     return Product.construct(product)
 
     def add(self, model: Product):
         values = {
@@ -80,7 +86,7 @@ class ProductRepository(AbstractRepository):
             del model.id_
 
 
-class Batchrepository(AbstractRepository):
+class BatchRepository(AbstractRepository):
     # batch model add,update and delete operations
     def get(self, id_: UUID) -> Batch:
         # get matching dictionary from static product list
@@ -94,14 +100,16 @@ class Batchrepository(AbstractRepository):
     def add(self, model: Batch):
         values = {
             "id_": model.id_,
-            "sku_id_": model.sku_id_,
+            "sku_id": model.sku_id,
             "purchase_order": model.purchase_order,
             "quantity": model.quantity,
             "material_handle": model.material_handle,
             "manufactured_date": model.manufactured_date,
             "expiry_date": model.expiry_date,
         }
-        model.append(values)
+        #
+        with open("file.json", "a+") as f:
+            f.write(f"{values}\n")
 
     def update(self, model: Batch):
         values = {
@@ -124,7 +132,7 @@ class Batchrepository(AbstractRepository):
             return "{model.id_} is deleted successfully"
 
 
-class Categoryrepository(AbstractRepository):
+class CategoryRepository(AbstractRepository):
     # category model add,update and delete operations
     def get(self, id_: UUID):
         # get matching dictionary from static product list

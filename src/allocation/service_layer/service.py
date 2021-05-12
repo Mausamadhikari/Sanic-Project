@@ -1,18 +1,34 @@
 from __future__ import annotations
 from uuid import UUID
-from allocation.domain.model import Batch
-from src.allocation.adapters.repository import (
-    BatchRepository,
-    Categoryrepository,
-    Productrepository,
-)
+from src.allocation.domain import model
+from src.allocation.domain.model import Batch
+from src.allocation.service_layer import unit_of_work
+from src.allocation.adapters.repository import BatchRepository
+from src.allocation.adapters.repository import CategoryRepository
+from src.allocation.adapters.repository import ProductRepository
 from src.allocation.service_layer import abstract, handler
 from src.allocation.domain import command
 
 
-def add_batch(validated_data: abstract.AddBatch) -> None:  # call commmand.py
+# def add_Batch(validated_data: abstract.AddBatch, uow: unit_of_work.BatchUnitOfWork):
+#     with uow:
+#         uow.model.add(
+#             model.batch_factory(
+#                 sku_id=validated_data.sku_id,
+#                 purchase_order=validated_data.purchase_order,
+#                 quantity=validated_data.quantity,
+#                 material_handle=validated_data.material_handle,
+#                 manufactured_date=validated_data.manufactured_date,
+#                 expiry_date=validated_data.expiry_date,
+#             )
+#         )
+#         uow.commit()
+
+
+def add_batch(validated_data: abstract.AddBatch) -> None:
+    # call commmand.py
     batch = handler.add_batch(
-        command.AddBatch(
+        command.CreateBatch(
             sku_id=validated_data.sku_id,
             purchase_order=validated_data.purchase_order,
             quantity=validated_data.quantity,
@@ -22,7 +38,7 @@ def add_batch(validated_data: abstract.AddBatch) -> None:  # call commmand.py
         )
     )  #
     repo = BatchRepository()
-    repo.add_batch(batch)
+    repo.add(batch)
 
 
 def update_batch_quantity(id_: UUID, validated_data: abstract.UpdateQuantity) -> None:
@@ -31,7 +47,7 @@ def update_batch_quantity(id_: UUID, validated_data: abstract.UpdateQuantity) ->
     batch = handler.update_batch(
         command.UpdadteBatchQuantity(model=Batch, quantity=validated_data.quatity)
     )
-    repo.update_batch(batch)
+    repo.update(batch)
 
 
 def add_product(validated_data: abstract.AddProduct) -> None:
@@ -46,7 +62,7 @@ def add_product(validated_data: abstract.AddProduct) -> None:
             updated_date=validated_data.updated_date,
         )
     )
-    repo = Productrepository()
+    repo = ProductRepository()
     repo.add_product(product)
 
 
@@ -57,5 +73,5 @@ def add_category(validated_data: abstract.AddCategory) -> None:
             sub_category=validated_data.sub_category,
         )
     )
-    repo = Categoryrepository()
+    repo = CategoryRepository()
     repo.add_category(category)

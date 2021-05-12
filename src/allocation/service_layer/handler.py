@@ -1,16 +1,17 @@
 from src.allocation.domain import model
 from src.allocation.domain.command import (
-    AddBatch,
+    CreateBatch,
     AddCategory,
     BatchCommand,
     UpdadteBatchQuantity,
 )
 
 
-async def add_batch(cmd: AddBatch) -> model.Batch:
+def add_batch(cmd: CreateBatch) -> model.Batch:
     return model.batch_factory(
         sku_id=cmd.sku_id,
         purchase_order=cmd.purchase_order,
+        quantity=cmd.quantity,
         material_handle=cmd.material_handle,
         manufactured_date=cmd.manufactured_date,
         expiry_date=cmd.expiry_date,
@@ -22,7 +23,7 @@ async def update_batch(cmd: BatchCommand) -> model.Batch:
         return cmd.batch.update({"quantity": cmd.quantity})
 
 
-async def add_product(cmd: AddBatch) -> model.Product:
+async def add_product(cmd: CreateBatch) -> model.Product:
     return model.product_factory(
         category=cmd.category,
         name=cmd.name,
