@@ -3,6 +3,7 @@ from src.allocation.domain.command import (
     CreateBatch,
     AddCategory,
     BatchCommand,
+    UpdadteBatchPurchaseOrder,
     UpdadteBatchQuantity,
 )
 
@@ -21,6 +22,8 @@ def add_batch(cmd: CreateBatch) -> model.Batch:
 async def update_batch(cmd: BatchCommand) -> model.Batch:
     if isinstance(cmd, UpdadteBatchQuantity):
         return cmd.batch.update({"quantity": cmd.quantity})
+    if isinstance(cmd,UpdadteBatchPurchaseOrder):
+        return cmd.batch.update({"purchase_order": cmd.purchase_order})
 
 
 async def add_product(cmd: CreateBatch) -> model.Product:

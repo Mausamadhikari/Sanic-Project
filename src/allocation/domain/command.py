@@ -14,6 +14,8 @@ class CreateBatch(BaseModel):
     manufactured_date: datetime
     expiry_date: datetime
 
+    
+
 
 class BatchCommand(BaseModel):
     batch: Batch
@@ -21,7 +23,8 @@ class BatchCommand(BaseModel):
 
 class UpdadteBatchQuantity(BatchCommand):
     quantity: int
-
+class UpdadteBatchPurchaseOrder(BatchCommand):
+    purchase_order: int
 
 # def delete_batch(id_:UUID):
 #     repo = BatchRepository()

@@ -72,12 +72,6 @@ class Product(BaseModel):
     status: bool
     updated_date: Optional[datetime] = None
 
-    @validator("name")
-    def check_name_length(cls, name):
-        if len(name) < 3:
-            raise ValueError("Name too short!!!")
-        return name
-
     class Config:
         extra = "forbid"
         allow_mutations = False

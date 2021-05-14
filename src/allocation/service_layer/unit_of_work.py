@@ -1,35 +1,15 @@
 from __future__ import annotations
-import abc
 from src.allocation.adapters import repository
+from src.lib.abstract_uow import AbstractUnitOfWork
 
-
-class AbstractUnitOfWork(abc.ABC):
-    model: repository.AbstractRepository
-
-    def __enter__(self) -> AbstractUnitOfWork:
-        return self
-
-    def __exit__(self, *args):
-        self.rollback()
-
-    def commit(self):
-        self._commit()
-
-    @abc.abstractmethod
-    def _commit(self):
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def rollback(self):
-        raise NotImplementedError
 
 class BatchUonitOfWork(AbstractUnitOfWork):
     def __init__(self):
-        self.model = repository.Batchrepository()
+        self.batchref = repository.Batchrepository([])
         self.committed = False
 
     def __enter__(self):
-        self.model = repository.Batchrepository()
+        self.batchref = repository.Batchrepository()
         return super().__enter__()
 
     def __exit__(self, *args):

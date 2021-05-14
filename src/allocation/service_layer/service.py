@@ -25,29 +25,33 @@ from src.allocation.domain import command
 #         uow.commit()
 
 
-def add_batch(validated_data: abstract.AddBatch) -> None:
+def add_batch(validated_data: abstract.AddBatch,uow:unit_of_work.BatchUonitOfWork) -> None:
     # call commmand.py
-    batch = handler.add_batch(
-        command.CreateBatch(
-            sku_id=validated_data.sku_id,
-            purchase_order=validated_data.purchase_order,
-            quantity=validated_data.quantity,
-            material_handle=validated_data.material_handle,
-            manufactured_date=validated_data.manufactured_date,
-            expiry_date=validated_data.expiry_date,
+    with uow:
+        batch = handler.add_batch(
+            command.CreateBatch(
+                sku_id=validated_data.sku_id,
+                purchase_order=validated_data.purchase_order,
+                quantity=validated_data.quantity,
+                material_handle=validated_data.material_handle,
+                manufactured_date=validated_data.manufactured_date,
+                expiry_date=validated_data.expiry_date,
+            )
+        )  #
+        repo = BatchRepository()
+        repo.add(batch)
+        uow.commit()
+
+
+def update_batch_quantity(id_: UUID, validated_data: abstract.UpdateQuantity,uow:unit_of_work.BatchUnitOfWork) -> None:
+    with uow:
+        repo = BatchRepository()
+        batch = repo.get(id_)  # why not batch.quantity = validated_data.quantity
+        batch = handler.update_batch(
+            command.UpdadteBatchQuantity(batch=batch, quantity=validated_data.quatity)
         )
-    )  #
-    repo = BatchRepository()
-    repo.add(batch)
-
-
-def update_batch_quantity(id_: UUID, validated_data: abstract.UpdateQuantity) -> None:
-    repo = BatchRepository()
-    batch = repo.get(id_)  # why not batch.quantity = validated_data.quantity
-    batch = handler.update_batch(
-        command.UpdadteBatchQuantity(model=Batch, quantity=validated_data.quatity)
-    )
-    repo.update(batch)
+        repo.update(batch)
+        uow.commit()
 
 
 def add_product(validated_data: abstract.AddProduct) -> None:

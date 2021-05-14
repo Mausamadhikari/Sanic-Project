@@ -1,11 +1,8 @@
+from sanic.response import json
 from src.allocation.domain.model import Product, Batch, Category
-
-
-from typing import List, Dict
 from uuid import UUID
-
-from randomthings.app import data_product_list, data_batch_list, data_category
-import abc
+from randomthings.app import data_product_list, data_category
+from src.lib.abstract_repository import AbstractRepository
 
 # async def update_values(model: List[Dict], values: Dict):
 #     """
@@ -27,30 +24,18 @@ import abc
 
 
 # ProductRepository
-class AbstractRepository(abc.ABC):
-    def get(self):
-        raise NotImplementedError
-
-    def add(self):
-        raise NotImplementedError
-
-    def update(self):
-        raise NotImplementedError
-
-    def delete(self):
-        raise NotImplementedError
 
 
 class ProductRepository(AbstractRepository):
     # Product model add , update and delete operations
-    # def get(self, id_: Product.id_) -> Product:
-    #     # get matching dictionary from static product list
-    #     # construct domain model from matched
-    #     # return product
-    #     product = {}
-    #     if id_ in data_product_list[id_]:
-    #         product = data_product_list[id_]
-    #     return Product.construct(product)
+    def get(self, id_: UUID) -> Product:
+        # get matching dictionary from static product list
+        # construct domain model from matched
+        # return product
+        product = {}
+        if id_ in data_product_list[id_]:
+            product = data_product_list[id_]
+        return Product.construct(product)
 
     def add(self, model: Product):
         values = {
@@ -77,6 +62,7 @@ class ProductRepository(AbstractRepository):
             "updated_date": model.updated_date,
         }
         for i in range(len(self) + 1):
+
             # if self[i]["id_"] == values.id_:
             self[i].update(values)
 
@@ -93,8 +79,12 @@ class BatchRepository(AbstractRepository):
         # construct domain model from matched
         # return product
         batch = {}
-        if id_ in data_batch_list[id_]:
-            batch = data_batch_list[id_]
+        with open("batch_file.json", "a+") as f:
+            data_batch_list = json(f)
+            if id_ in data_batch_list[id_]:
+                batch = data_batch_list[id_]
+            else:
+                batch is None
         return Batch.construct(batch)
 
     def add(self, model: Batch):
@@ -108,7 +98,7 @@ class BatchRepository(AbstractRepository):
             "expiry_date": model.expiry_date,
         }
         #
-        with open("file.json", "a+") as f:
+        with open("batch_file.json", "a+") as f:
             f.write(f"{values}\n")
 
     def update(self, model: Batch):

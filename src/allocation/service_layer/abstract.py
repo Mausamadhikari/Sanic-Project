@@ -1,4 +1,4 @@
-from pydantic import BaseModel,HttpUrl
+from pydantic import BaseModel, HttpUrl
 from typing import Optional
 from datetime import datetime
 from uuid import UUID, uuid4
@@ -8,19 +8,18 @@ from src.allocation.domain.model import Batch
 class AddBatch(BaseModel):
     sku_id: UUID
     purchase_order: int
-    quantity:int
+    quantity: int
     material_handle: int
     manufactured_date: datetime
     expiry_date: datetime
 
 
-class BatchCommand(BaseModel):
-    batch: Batch
-
-
-class UpdadteQuantity(BatchCommand):
+class UpdadteQuantity(BaseModel):
     quantity: int
 
+
+class UpdadtePurchaseOrder(BaseModel):
+    purchaseorder: int
 
 
 class AddProduct(BaseModel):

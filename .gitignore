@@ -122,6 +122,8 @@ randomthings/
 file.json
 app.py
 readme.md
+*.json
+*/*.json
 # Distribution / packaging
 .Python
 build/
