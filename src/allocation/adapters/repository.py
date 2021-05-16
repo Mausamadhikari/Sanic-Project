@@ -1,7 +1,5 @@
 from sanic.response import json
 from src.allocation.domain.model import Product, Batch, Category
-from uuid import UUID
-from randomthings.app import data_product_list, data_category
 from src.lib.abstract_repository import AbstractRepository
 
 # async def update_values(model: List[Dict], values: Dict):
@@ -24,20 +22,30 @@ from src.lib.abstract_repository import AbstractRepository
 
 
 # ProductRepository
+data_product_list = []
+data_category = []
 
 
 class ProductRepository(AbstractRepository):
     # Product model add , update and delete operations
-    def get(self, id_: UUID) -> Product:
+    def get(self, id_: int) -> Product:
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product
-        product = {}
-        if id_ in data_product_list[id_]:
-            product = data_product_list[id_]
-        return Product.construct(product)
+        product_ = {}
+        print("hello World")
+        for product in data_product_list:
+            if product["id_"] == id_:
+                product_ = product
+                print("This is product", product_, type(product_))
+        # [product for product in data_product_list if product["id_"] == id_]
+        # next(product for product in data_product_list if product["id_"] == id_)
+        # dict(filter(lambda product:product["id_"]==id_,data_product_list))
+        # return Product.construct(product_)
+        return Product(**product_)
 
     def add(self, model: Product):
+        print("Repository", model)
         values = {
             "id_": model.id_,
             "category": model.category,
@@ -48,9 +56,10 @@ class ProductRepository(AbstractRepository):
             "status": model.status,
             "updated_date": model.updated_date,
         }
-        model.append(values)
+        print("Repository Add", values)
+        data_product_list.append(values)
 
-    def update(self, model: Product) -> None:
+    def update(self, id_: int, model: Product) -> None:
         values = {
             "id_": model.id_,
             "category": model.category,
@@ -61,10 +70,14 @@ class ProductRepository(AbstractRepository):
             "status": model.status,
             "updated_date": model.updated_date,
         }
-        for i in range(len(self) + 1):
+        # for i in range(len(self) + 1):
 
-            # if self[i]["id_"] == values.id_:
-            self[i].update(values)
+        #     if self[i]["id_"] == values.id_:
+        #         self[i] = values
+        # print(data_product_list)
+        for product in data_product_list:
+            if product["id_"] == id_:
+                product = values
 
     def delete(self, model: Product):
         if self.id_ in model.id_:
@@ -74,7 +87,7 @@ class ProductRepository(AbstractRepository):
 
 class BatchRepository(AbstractRepository):
     # batch model add,update and delete operations
-    def get(self, id_: UUID) -> Batch:
+    def get(self, id_: int) -> Batch:
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product
@@ -124,7 +137,7 @@ class BatchRepository(AbstractRepository):
 
 class CategoryRepository(AbstractRepository):
     # category model add,update and delete operations
-    def get(self, id_: UUID):
+    def get(self, id_: int):
         # get matching dictionary from static product list
         # construct domain model from matched
         # return product

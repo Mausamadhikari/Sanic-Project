@@ -1,10 +1,13 @@
 from src.allocation.domain import model
 from src.allocation.domain.command import (
+    AddProduct,
     CreateBatch,
     AddCategory,
     BatchCommand,
+    ProductCommand,
     UpdadteBatchPurchaseOrder,
     UpdadteBatchQuantity,
+    UpdateProduct,
 )
 
 
@@ -19,14 +22,14 @@ def add_batch(cmd: CreateBatch) -> model.Batch:
     )
 
 
-async def update_batch(cmd: BatchCommand) -> model.Batch:
+def update_batch(cmd: BatchCommand) -> model.Batch:
     if isinstance(cmd, UpdadteBatchQuantity):
         return cmd.batch.update({"quantity": cmd.quantity})
-    if isinstance(cmd,UpdadteBatchPurchaseOrder):
+    if isinstance(cmd, UpdadteBatchPurchaseOrder):
         return cmd.batch.update({"purchase_order": cmd.purchase_order})
 
 
-async def add_product(cmd: CreateBatch) -> model.Product:
+def add_product(cmd: AddProduct) -> model.Product:
     return model.product_factory(
         category=cmd.category,
         name=cmd.name,
@@ -38,7 +41,22 @@ async def add_product(cmd: CreateBatch) -> model.Product:
     )
 
 
-async def add_category(cmd: AddCategory) -> model.Category:
+def update_product(cmd: ProductCommand) -> model.Product:
+    if isinstance(cmd, UpdateProduct):
+        return cmd.product.update(
+            {
+                "category": cmd.category,
+                "name": cmd.name,
+                "description": cmd.description,
+                "slug": cmd.slug,
+                "brand": cmd.brand,
+                "status": cmd.status,
+                "updated_date": cmd.updated_date,
+            }
+        )
+
+
+def add_category(cmd: AddCategory) -> model.Category:
     return model.category_factory(
         name=cmd.name,
         sub_category=cmd.sub_category,

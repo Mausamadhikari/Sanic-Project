@@ -1,5 +1,4 @@
 from __future__ import annotations
-from uuid import UUID
 from src.allocation.domain import model
 from src.allocation.domain.model import Batch
 from src.allocation.service_layer import unit_of_work
@@ -25,7 +24,9 @@ from src.allocation.domain import command
 #         uow.commit()
 
 
-def add_batch(validated_data: abstract.AddBatch,uow:unit_of_work.BatchUonitOfWork) -> None:
+def add_batch(
+    validated_data: abstract.AddBatch, uow: unit_of_work.BatchUonitOfWork
+) -> None:
     # call commmand.py
     with uow:
         batch = handler.add_batch(
@@ -43,7 +44,11 @@ def add_batch(validated_data: abstract.AddBatch,uow:unit_of_work.BatchUonitOfWor
         uow.commit()
 
 
-def update_batch_quantity(id_: UUID, validated_data: abstract.UpdateQuantity,uow:unit_of_work.BatchUnitOfWork) -> None:
+def update_batch_quantity(
+    id_: int,
+    validated_data: abstract.UpdateQuantity,
+    uow: unit_of_work.BatchUonitOfWork,
+) -> None:
     with uow:
         repo = BatchRepository()
         batch = repo.get(id_)  # why not batch.quantity = validated_data.quantity
@@ -66,8 +71,35 @@ def add_product(validated_data: abstract.AddProduct) -> None:
             updated_date=validated_data.updated_date,
         )
     )
+    print("Service", product)
     repo = ProductRepository()
-    repo.add_product(product)
+    repo.add(product)
+
+
+def update_product(id_: int, validated_data: abstract.UpdateProduct) -> None:
+    repo = ProductRepository()
+    product = repo.get(id_)
+    print("this is from service", product)
+    product_ = handler.update_product(
+        command.UpdateProduct(
+            product=product,
+            category=validated_data.category
+            if validated_data.category
+            else product.category,
+            name=validated_data.name if validated_data.name else product.name,
+            description=validated_data.description
+            if validated_data.description
+            else product.description,
+            slug=validated_data.slug if validated_data.slug else product.slug,
+            brand=validated_data.brand if validated_data.brand else product.brand,
+            status=validated_data.status if validated_data.status else product.status,
+            updated_date=validated_data.updated_date
+            if validated_data.updated_date
+            else product.updated_date,
+        )
+    )
+    print("Service", product_)
+    repo.update(id_, product_)
 
 
 def add_category(validated_data: abstract.AddCategory) -> None:

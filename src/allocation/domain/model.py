@@ -1,16 +1,15 @@
 from __future__ import annotations
-import uuid
 from pydantic import BaseModel, Field, HttpUrl, validator
 from datetime import datetime
 from pydantic.color import Color
 from typing import Optional, Dict, Any
-from uuid import UUID, uuid4
+from src.lib.id_generator import id_gen
 
 
 class Batch(BaseModel):
 
-    id_: UUID
-    sku_id: UUID
+    id_: int
+    sku_id: int
     purchase_order: int
     quantity: int
     material_handle: int
@@ -40,7 +39,7 @@ def batch_factory(
     expiry_date: datetime,
 ) -> Batch:
     return Batch(
-        id_=uuid.uuid4(),
+        id_=id_gen(),
         sku_id=sku_id,
         purchase_order=purchase_order,
         quantity=quantity,
@@ -51,7 +50,7 @@ def batch_factory(
 
 
 class Sku(BaseModel):
-    id_: UUID
+    id_: int
     product: int
     color: Color
     size: str
@@ -63,8 +62,8 @@ class Sku(BaseModel):
 
 
 class Product(BaseModel):
-    id_: UUID
-    category: UUID
+    id_: int
+    category: int
     name: str
     description: str
     slug: HttpUrl
@@ -77,12 +76,12 @@ class Product(BaseModel):
         allow_mutations = False
         title = "Product"
 
-    def update(self, mapping: Dict[str, Any]):
+    def update(self, mapping: Dict[str, Any]) -> Product:
         return self.copy(update=mapping)
 
 
 def product_factory(
-    category: UUID,
+    category: int,
     name: str,
     description: str,
     slug: HttpUrl,
@@ -91,7 +90,7 @@ def product_factory(
     updated_date: Optional[datetime] = None,
 ) -> Product:
     return Product(
-        id_=uuid(),
+        id_=id_gen(),
         category=category,
         name=name,
         description=description,
@@ -103,9 +102,9 @@ def product_factory(
 
 
 class Category(BaseModel):
-    id_: UUID
+    id_: int
     name: str
-    sub_category: UUID
+    sub_category: int
 
     class Config:
         extra = "forbid"
@@ -117,19 +116,19 @@ class Category(BaseModel):
 
 
 def category_factory(
-    id_: UUID,
+    id_: int,
     name: str,
-    sub_category: UUID,
+    sub_category: int,
 ) -> Category:
     return Category(
-        id_=uuid(),
+        id_=id_gen(),
         name=name,
         sub_category=sub_category,
     )
 
 
 class Unit(BaseModel):
-    id_: UUID
+    id_: int
     total_unit: int
     label: str
 
@@ -147,7 +146,7 @@ def unit_factory(
     label: str,
 ) -> Unit:
     return Unit(
-        id_=uuid(),
+        id_=id_gen(),
         total_unit=total_unit,
         label=label,
     )
