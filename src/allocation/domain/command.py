@@ -48,13 +48,31 @@ class ProductCommand(BaseModel):
     product: Product
 
 
-class UpdateProduct(ProductCommand):
+class UpdateProductCategory(ProductCommand):
     category: int
+
+
+class UpdateProductName(ProductCommand):
     name: str
+
+
+class UpdateProductDescription(ProductCommand):
     description: str
+
+
+class UpdateProductSlug(ProductCommand):
     slug: HttpUrl
+
+
+class UpdateProductBrand(ProductCommand):
     brand: str
+
+
+class UpdateProductStatus(ProductCommand):
     status: bool
+
+
+class UpdateProductUpdatedDate(ProductCommand):
     updated_date: Optional[datetime]
 
 

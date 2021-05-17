@@ -1,3 +1,7 @@
+from allocation.service_layer.abstract import (
+    UpdateProductDescription,
+    UpdateProductName,
+)
 from src.allocation.domain import model
 from src.allocation.domain.command import (
     AddProduct,
@@ -8,6 +12,11 @@ from src.allocation.domain.command import (
     UpdadteBatchPurchaseOrder,
     UpdadteBatchQuantity,
     UpdateProduct,
+    UpdateProductBrand,
+    UpdateProductCategory,
+    UpdateProductSlug,
+    UpdateProductStatus,
+    UpdateProductUpdatedDate,
 )
 
 
@@ -42,18 +51,20 @@ def add_product(cmd: AddProduct) -> model.Product:
 
 
 def update_product(cmd: ProductCommand) -> model.Product:
-    if isinstance(cmd, UpdateProduct):
-        return cmd.product.update(
-            {
-                "category": cmd.category,
-                "name": cmd.name,
-                "description": cmd.description,
-                "slug": cmd.slug,
-                "brand": cmd.brand,
-                "status": cmd.status,
-                "updated_date": cmd.updated_date,
-            }
-        )
+    if isinstance(cmd, UpdateProductCategory):
+        return cmd.product.update({"category": cmd.category})
+    if isinstance(cmd, UpdateProductName):
+        return cmd.product.update({"name": cmd.name})
+    if isinstance(cmd, UpdateProductDescription):
+        return cmd.product.update({"description": cmd.description})
+    if isinstance(cmd, UpdateProductSlug):
+        return cmd.product.update({"slug": cmd.slug})
+    if isinstance(cmd, UpdateProductBrand):
+        return cmd.product.update({"brand": cmd.brand})
+    if isinstance(cmd, UpdateProductStatus):
+        return cmd.product.update({"status": cmd.status})
+    if isinstance(cmd, UpdateProductUpdatedDate):
+        return cmd.product.update({"updated_date": cmd.updated_date})
 
 
 def add_category(cmd: AddCategory) -> model.Category:

@@ -9,21 +9,6 @@ from src.allocation.service_layer import abstract, handler
 from src.allocation.domain import command
 
 
-# def add_Batch(validated_data: abstract.AddBatch, uow: unit_of_work.BatchUnitOfWork):
-#     with uow:
-#         uow.model.add(
-#             model.batch_factory(
-#                 sku_id=validated_data.sku_id,
-#                 purchase_order=validated_data.purchase_order,
-#                 quantity=validated_data.quantity,
-#                 material_handle=validated_data.material_handle,
-#                 manufactured_date=validated_data.manufactured_date,
-#                 expiry_date=validated_data.expiry_date,
-#             )
-#         )
-#         uow.commit()
-
-
 def add_batch(
     validated_data: abstract.AddBatch, uow: unit_of_work.BatchUonitOfWork
 ) -> None:
@@ -47,7 +32,7 @@ def add_batch(
 def update_batch_quantity(
     id_: int,
     validated_data: abstract.UpdateQuantity,
-    uow: unit_of_work.BatchUonitOfWork,
+    uow: unit_of_work.BatchUnitOfWork,
 ) -> None:
     with uow:
         repo = BatchRepository()
@@ -59,47 +44,39 @@ def update_batch_quantity(
         uow.commit()
 
 
-def add_product(validated_data: abstract.AddProduct) -> None:
-    product = handler.add_product(
-        command.AddProduct(
-            category=validated_data.category,
-            name=validated_data.name,
-            description=validated_data.description,
-            slug=validated_data.slug,
-            brand=validated_data.brand,
-            status=validated_data.status,
-            updated_date=validated_data.updated_date,
+def add_product(
+    validated_data: abstract.AddProduct, uow: unit_of_work.ProductUnitOfWork
+) -> None:
+    with uow:
+        product = handler.add_product(
+            command.AddProduct(
+                category=validated_data.category,
+                name=validated_data.name,
+                description=validated_data.description,
+                slug=validated_data.slug,
+                brand=validated_data.brand,
+                status=validated_data.status,
+                updated_date=validated_data.updated_date,
+            )
         )
-    )
-    print("Service", product)
-    repo = ProductRepository()
-    repo.add(product)
+        repo = ProductRepository()
+        repo.add(product)
+        uow.commit()
 
 
-def update_product(id_: int, validated_data: abstract.UpdateProduct) -> None:
-    repo = ProductRepository()
-    product = repo.get(id_)
-    print("this is from service", product)
-    product_ = handler.update_product(
-        command.UpdateProduct(
-            product=product,
-            category=validated_data.category
-            if validated_data.category
-            else product.category,
-            name=validated_data.name if validated_data.name else product.name,
-            description=validated_data.description
-            if validated_data.description
-            else product.description,
-            slug=validated_data.slug if validated_data.slug else product.slug,
-            brand=validated_data.brand if validated_data.brand else product.brand,
-            status=validated_data.status if validated_data.status else product.status,
-            updated_date=validated_data.updated_date
-            if validated_data.updated_date
-            else product.updated_date,
+def update_product_category(
+    id_: int,
+    validated_data: abstract.UpdateProductCategory,
+    uow: unit_of_work.ProductUnitOfWork,
+) -> None:
+    with uow:
+        repo = ProductRepository()
+        product = repo.get(id_)
+        product_ = handler.update_product(
+            command.UpdateProduct(product=product, category=validated_data.category)
         )
-    )
-    print("Service", product_)
-    repo.update(id_, product_)
+        repo.update(id_, product_)
+        uow.commit()
 
 
 def add_category(validated_data: abstract.AddCategory) -> None:

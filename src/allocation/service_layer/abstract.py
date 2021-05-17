@@ -31,15 +31,32 @@ class AddProduct(BaseModel):
     updated_date: Optional[datetime]
 
 
-class UpdateProduct(BaseModel):
-    category: Optional[int] = None
-    name: Optional[str] = None
-    description: Optional[str] = None
-    slug: Optional[HttpUrl] = None
-    brand: Optional[str] = None
-    status: Optional[bool] = None
-    updated_date: Optional[datetime] = None
+class UpdateProductCategory(BaseModel):
+    category: int
 
+
+class UpdateProductName(BaseModel):
+    name: str
+
+
+class UpdateProductDescription(BaseModel):
+    description: str
+
+
+class UpdateProductSlug(BaseModel):
+    slug: HttpUrl
+
+
+class UpdateProductBrand(BaseModel):
+    brand: str
+
+
+class UpdateProductStatus(BaseModel):
+    status: bool
+
+
+class UpdateProductUpdatedDate(BaseModel):
+    updated_date: Optional[datetime]
 
 class AddCategory(BaseModel):
     name: str

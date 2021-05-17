@@ -42,7 +42,7 @@ class ProductRepository(AbstractRepository):
         # next(product for product in data_product_list if product["id_"] == id_)
         # dict(filter(lambda product:product["id_"]==id_,data_product_list))
         # return Product.construct(product_)
-        return Product(**product_)
+        return Product.construct(**product_)
 
     def add(self, model: Product):
         print("Repository", model)
@@ -98,7 +98,7 @@ class BatchRepository(AbstractRepository):
                 batch = data_batch_list[id_]
             else:
                 batch is None
-        return Batch.construct(batch)
+        return Batch.construct(**batch)
 
     def add(self, model: Batch):
         values = {
