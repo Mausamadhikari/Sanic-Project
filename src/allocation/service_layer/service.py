@@ -9,7 +9,7 @@ from src.allocation.service_layer import abstract, handler
 from src.allocation.domain import command
 
 
-def add_batch(
+async def add_batch(
     validated_data: abstract.AddBatch, uow: unit_of_work.BatchUonitOfWork
 ) -> None:
     # call commmand.py
@@ -25,11 +25,11 @@ def add_batch(
             )
         )  #
         repo = BatchRepository()
-        repo.add(batch)
+        await repo.add(batch)
         uow.commit()
 
 
-def update_batch_quantity(
+async def update_batch_quantity(
     id_: int,
     validated_data: abstract.UpdateQuantity,
     uow: unit_of_work.BatchUnitOfWork,
@@ -40,11 +40,11 @@ def update_batch_quantity(
         batch = handler.update_batch(
             command.UpdadteBatchQuantity(batch=batch, quantity=validated_data.quatity)
         )
-        repo.update(batch)
+        await repo.update(batch)
         uow.commit()
 
 
-def add_product(
+async def add_product(
     validated_data: abstract.AddProduct, uow: unit_of_work.ProductUnitOfWork
 ) -> None:
     with uow:
@@ -60,11 +60,11 @@ def add_product(
             )
         )
         repo = ProductRepository()
-        repo.add(product)
+        await repo.add(product)
         uow.commit()
 
 
-def update_product_category(
+async def update_product_category(
     id_: int,
     validated_data: abstract.UpdateProductCategory,
     uow: unit_of_work.ProductUnitOfWork,
@@ -75,11 +75,12 @@ def update_product_category(
         product_ = handler.update_product(
             command.UpdateProduct(product=product, category=validated_data.category)
         )
-        repo.update(id_, product_)
+        await repo.update(id_, product_)
+        #event trigger garne yaha
         uow.commit()
 
 
-def add_category(validated_data: abstract.AddCategory) -> None:
+async def add_category(validated_data: abstract.AddCategory) -> None:
     category = handler.add_category(
         command.AddCategory(
             name=validated_data.name,
@@ -87,4 +88,4 @@ def add_category(validated_data: abstract.AddCategory) -> None:
         )
     )
     repo = CategoryRepository()
-    repo.add_category(category)
+    await repo.add_category(category)

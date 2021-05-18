@@ -33,11 +33,9 @@ class ProductRepository(AbstractRepository):
         # construct domain model from matched
         # return product
         product_ = {}
-        print("hello World")
         for product in data_product_list:
             if product["id_"] == id_:
                 product_ = product
-                print("This is product", product_, type(product_))
         # [product for product in data_product_list if product["id_"] == id_]
         # next(product for product in data_product_list if product["id_"] == id_)
         # dict(filter(lambda product:product["id_"]==id_,data_product_list))
@@ -45,7 +43,6 @@ class ProductRepository(AbstractRepository):
         return Product.construct(**product_)
 
     def add(self, model: Product):
-        print("Repository", model)
         values = {
             "id_": model.id_,
             "category": model.category,
@@ -56,7 +53,6 @@ class ProductRepository(AbstractRepository):
             "status": model.status,
             "updated_date": model.updated_date,
         }
-        print("Repository Add", values)
         data_product_list.append(values)
 
     def update(self, id_: int, model: Product) -> None:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 from src.allocation.adapters import repository
 from src.lib.abstract_uow import AbstractUnitOfWork
+from src.allocation.service_layer import messagebus
 
 
 class BatchUnitOfWork(AbstractUnitOfWork):
@@ -38,6 +39,13 @@ class ProductUnitOfWork(AbstractUnitOfWork):
 
     def commit(self):
         self.committed = True
+        self.publish_events()
+
+    def publish_events(self):
+        for product in self.products.seen:
+            while product.events:
+                event = product.events.pop(0)
+                messagebus.handle(event)
 
     def rollback(self):
         pass

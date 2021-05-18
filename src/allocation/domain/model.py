@@ -3,7 +3,51 @@ from pydantic import BaseModel, Field, HttpUrl, validator
 from datetime import datetime
 from pydantic.color import Color
 from typing import Optional, Dict, Any
+from allocation.domain import events
 from src.lib.id_generator import id_gen
+from typing import List
+
+
+class Product(BaseModel):
+    id_: int
+    category: int
+    name: str
+    description: str
+    slug: HttpUrl
+    brand: str
+    status: bool
+    updated_date: Optional[datetime]
+    events: Optional[List]
+
+    class Config:
+        extra = "forbid"
+        allow_mutations = False
+        title = "Product"
+
+    def update(self, mapping: Dict[str, Any]) -> Product:
+        return self.copy(update=mapping)
+
+
+def product_factory(
+    category: int,
+    name: str,
+    description: str,
+    slug: HttpUrl,
+    brand: str,
+    status: bool,
+    updated_date: Optional[datetime] = None,
+) -> Product:
+    return Product(
+        id_=id_gen(),
+        category=category,
+        name=name,
+        description=description,
+        slug=slug,
+        brand=brand,
+        status=status,
+        updated_date=updated_date,
+        events=[],
+    )
 
 
 class Batch(BaseModel):
@@ -59,46 +103,6 @@ class Sku(BaseModel):
         extra = "forbid"
         allow_mutations = False
         title = "SKU"
-
-
-class Product(BaseModel):
-    id_: int
-    category: int
-    name: str
-    description: str
-    slug: HttpUrl
-    brand: str
-    status: bool
-    updated_date: Optional[datetime] = None
-
-    class Config:
-        extra = "forbid"
-        allow_mutations = False
-        title = "Product"
-
-    def update(self, mapping: Dict[str, Any]) -> Product:
-        return self.copy(update=mapping)
-
-
-def product_factory(
-    category: int,
-    name: str,
-    description: str,
-    slug: HttpUrl,
-    brand: str,
-    status: bool,
-    updated_date: Optional[datetime] = None,
-) -> Product:
-    return Product(
-        id_=id_gen(),
-        category=category,
-        name=name,
-        description=description,
-        slug=slug,
-        brand=brand,
-        status=status,
-        updated_date=updated_date,
-    )
 
 
 class Category(BaseModel):
