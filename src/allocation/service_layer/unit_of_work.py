@@ -6,7 +6,7 @@ from src.allocation.service_layer import messagebus
 
 class BatchUnitOfWork(AbstractUnitOfWork):
     def __init__(self):
-        self.batchref = repository.BatchRepository([])
+        self.batchref = repository.BatchRepository()
         self.committed = False
 
     def __enter__(self):
@@ -15,10 +15,15 @@ class BatchUnitOfWork(AbstractUnitOfWork):
 
     def __exit__(self, *args):
         super().__exit__(*args)
-        self.close()
 
-    def commit(self):
+    def _commit(self):
         self.committed = True
+
+    def collect_new_events(self):
+        self.batchref = repository.BatchRepository()
+        for batch in self.batchref.seen:
+            while batch.events:
+                yield batch.events.pop(0)
 
     def rollback(self):
         pass
@@ -26,26 +31,24 @@ class BatchUnitOfWork(AbstractUnitOfWork):
 
 class ProductUnitOfWork(AbstractUnitOfWork):
     def __init__(self):
-        self.batchref = repository.ProductRepository([])
+        self.product = repository.ProductRepository()
         self.committed = False
 
     def __enter__(self):
-        self.batchref = repository.ProductRepository()
+        self.product = repository.ProductRepository()
         return super().__enter__()
 
     def __exit__(self, *args):
         super().__exit__(*args)
-        self.close()
 
-    def commit(self):
+    def _commit(self):
         self.committed = True
-        self.publish_events()
 
-    def publish_events(self):
-        for product in self.products.seen:
+    def collect_new_events(self):
+        self.product = repository.ProductRepository()
+        for product in self.product.seen:
             while product.events:
-                event = product.events.pop(0)
-                messagebus.handle(event)
+                yield product.events.pop(0)
 
     def rollback(self):
         pass

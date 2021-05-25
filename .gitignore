@@ -124,6 +124,7 @@ app.py
 readme.md
 *.json
 */*.json
+batch_file.json
 # Distribution / packaging
 .Python
 build/

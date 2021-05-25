@@ -1,20 +1,29 @@
 from pydantic import BaseModel, HttpUrl
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from src.allocation.domain.model import Batch, Product
 
 
-class CreateBatch(BaseModel):
+class Command(BaseModel):
+    pass
+
+
+class CreateBatch(Command):
     sku_id: int
-    purchase_order: int
+    purchase_quantity: int
     quantity: int
     material_handle: int
     manufactured_date: datetime
     expiry_date: datetime
 
 
-class BatchCommand(BaseModel):
+class Allocate(Command):
+    sku_id: int
+    qty: int
+
+
+class BatchCommand(Command):
     batch: Batch
 
 
@@ -22,8 +31,8 @@ class UpdadteBatchQuantity(BatchCommand):
     quantity: int
 
 
-class UpdadteBatchPurchaseOrder(BatchCommand):
-    purchase_order: int
+class UpdadteBatchPurchaseQuantity(BatchCommand):
+    purchase_quantity: int
 
 
 # def delete_batch(id_:int):
@@ -34,9 +43,10 @@ class UpdadteBatchPurchaseOrder(BatchCommand):
 #     id_ : int
 
 
-class AddProduct(BaseModel):
+class CreateProduct(Command):
     category: int
     name: str
+
     description: str
     slug: HttpUrl
     brand: str
@@ -44,8 +54,18 @@ class AddProduct(BaseModel):
     updated_date: Optional[datetime]
 
 
-class ProductCommand(BaseModel):
+class ProductCommand(Command):
     product: Product
+
+
+class UpdateProduct(ProductCommand):
+    category: int
+    name: str
+    description: str
+    slug: HttpUrl
+    brand: str
+    status: bool
+    updated_date: Optional[datetime]
 
 
 class UpdateProductCategory(ProductCommand):
@@ -76,6 +96,6 @@ class UpdateProductUpdatedDate(ProductCommand):
     updated_date: Optional[datetime]
 
 
-class AddCategory(BaseModel):
+class CreateCategory(Command):
     name: str
     sub_category: int
